@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿using Hook;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Sample;
@@ -6,9 +7,6 @@ namespace Sample;
 public class Program
 {
     public static void Main() { }
-
-    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
-    private static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
 
     private static EntryPoint entryPoint = new EntryPoint();
 
@@ -44,7 +42,7 @@ public class Program
                 case DLL_THREAD_ATTACH: break;
                 case DLL_THREAD_DETACH: break;
             }
-        } catch (Exception ex) { MessageBox(0, ex.ToString(), "C# Exception", 0); }
+        } catch (Exception ex) { Interop.MessageBox(0, ex.ToString(), "C# Exception", 0); }
 
         return true;
     }

@@ -1,9 +1,26 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net7.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
+		<IncludeNativeLibrariesForSelfExtract>true</IncludeNativeLibrariesForSelfExtract>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+		<IncludeSymbolsInSingleFile>true</IncludeSymbolsInSingleFile>
+		<PublishAot>true</PublishAot>
+		<StripSymbols>true</StripSymbols>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Hook\Hook.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkAssemblies Remove="Detours.dll" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PrivateSdkAssemblies Remove="Detours.dll" />
+  </ItemGroup>
 
 </Project>
