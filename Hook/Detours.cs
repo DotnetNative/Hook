@@ -5,8 +5,16 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Hook;
-public unsafe class Detours
+public unsafe class HookApi
 {
+    public static void AltInit()
+    {
+        Load();
+        Restore();
+        Begin();
+        UpdateCurrentThread();
+    }
+
     public static void Load()
     {
         detours = Interop.LoadLibrary(@"D:\VS\repos\Detours\x64\Debug\Detours.dll");
@@ -27,12 +35,14 @@ public unsafe class Detours
     private static delegate* unmanaged<IntPtr, int> detourUpdateThread;
     private static delegate* unmanaged<int> detourTransactionCommit;
 
-    public static int DetourRestoreAfterWith() => detourRestoreAfterWith();
-    public static IntPtr DetourAttach(void** pe, void* nis) => detourAttach(pe, nis);
-    public static IntPtr DetourDetach(void** pe, void* nis) => detourDetach(pe, nis);
-    public static int DetourTransactionBegin() => detourTransactionBegin();
-    public static int DetourUpdateThread(IntPtr handle) => detourUpdateThread(handle);
-    public static int DetourTransactionCommit() => detourTransactionCommit();
+    public static int Restore() => detourRestoreAfterWith();
+    public static IntPtr Attach(void** pe, void* nis) => detourAttach(pe, nis);
+    public static IntPtr Detach(void** pe, void* nis) => detourDetach(pe, nis);
+    public static int Begin() => detourTransactionBegin();
+    public static int UpdateThread(IntPtr handle) => detourUpdateThread(handle);
+    public static int Commit() => detourTransactionCommit();
 
-    public static int DetourUpdateCurrentThread() => DetourUpdateThread(Interop.GetCurrentThread());
+    public static int UpdateCurrentThread() => UpdateThread(Interop.GetCurrentThread());
+    //public static IntPtr Attach(void* pe, void* nis) => detourAttach(&pe, nis);
+    //public static IntPtr Detach(void* pe, void* nis) => detourDetach(&pe, nis);
 }

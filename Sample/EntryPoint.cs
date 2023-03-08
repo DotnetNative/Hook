@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,9 +11,6 @@ using Hook;
 namespace Sample;
 public unsafe class EntryPoint
 {
-    //[DllImport("Detours", CallingConvention = CallingConvention.Cdecl)]
-    //public static extern int DetourAttach(void** pp, void* pd);
-
     private static string logPath = @"C:\log.txt";
     public static void Log(object obj)
     {
@@ -25,10 +24,10 @@ public unsafe class EntryPoint
         counter++;
     }
 
-    [UnmanagedCallersOnly(EntryPoint = "MessageBox2")]
+    [UnmanagedCallersOnly(EntryPoint = "Sleep2")]
     public static void Sleep2(uint ms)
     {
-        Show("WWWOOOWWW " + ms);
+        Show("sleep time: " + ms);
     }
 
     public void Load()
@@ -36,29 +35,24 @@ public unsafe class EntryPoint
         File.WriteAllText(logPath, "");
         Log($"Injected at {DateTime.Now}");
 
-        IntPtr d = Interop.LoadLibrary(@"D:\VS\repos\Detours\x64\Debug\Detours.dll");
+        HookApi.AltInit();
 
-        IntPtr draw = Interop.GetProcAddress(d, "DllDetourRestoreAfterWith");
-        IntPtr da = Interop.GetProcAddress(d, "DetourAttach");
-        IntPtr dd = Interop.GetProcAddress(d, "DetourDetach");
-        IntPtr dtb = Interop.GetProcAddress(d, "DetourTransactionBegin");
-        IntPtr dut = Interop.GetProcAddress(d, "DetourUpdateThread");
-        IntPtr dtc = Interop.GetProcAddress(d, "DetourTransactionCommit");
+        Function origin = new Function("kernel32.Sleep");
+        Function ripped = new Function((delegate* unmanaged<uint, void>)&Sleep2);
+        HookFunction hook = new HookFunction(origin, ripped);
 
-        void* pp = Interop.GetProcAddress(Interop.GetModuleHandle("kernel32"), "Sleep").ToPointer();
-        void* pd = (delegate* unmanaged<uint, void>)&Sleep2;
+        hook.Attach();
+        
+        HookApi.Commit();
 
-        ((delegate* unmanaged<int>)draw.ToPointer())();
-        ((delegate* unmanaged<int>)dtb.ToPointer())();
-        ((delegate* unmanaged<IntPtr, int>)dut.ToPointer())(Interop.GetCurrentThread());
+        Show("First");
+        // Will be hooked
+        Interop.Sleep(10000);
 
-        ((delegate* unmanaged<void**, void*, IntPtr>) da.ToPointer())(&pp, pd);
-
-        ((delegate* unmanaged<int>)dtc.ToPointer())();
-
-        Show("I started");
-        Interop.Sleep(5000);
-        Show("I end");
+        Show("Second");
+        // Will not be hooked
+        ((delegate* unmanaged<uint, void>)hook)(10000); //can be used 'hook', 'origin', or 'origin.Ptr'
+        Show("End");
     }
 
     public void Unload()
