@@ -9,6 +9,13 @@
 		<IncludeSymbolsInSingleFile>true</IncludeSymbolsInSingleFile>
 		<PublishAot>true</PublishAot>
 		<StripSymbols>true</StripSymbols>
+		<GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+		<PackageId>Yotic.Hook</PackageId>
+		<Title>Function Hooking Library. Works in conjunction with NativeAOT</Title>
+		<Authors>Yotic</Authors>
+		<Company />
+		<Product />
+		<Description>Function Hooking Library. Works in conjunction with NativeAOT</Description>
 	</PropertyGroup>
 
   <ItemGroup>
