@@ -11,6 +11,12 @@ using Hook;
 namespace Sample;
 public unsafe class EntryPoint
 {
+    [DllImport("user32", SetLastError = true, CharSet = CharSet.Auto)]
+    internal static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
+
+    [DllImport("kernel32")]
+    internal static extern void Sleep(uint dwMilliseconds);
+
     private static string logPath = @"C:\log.txt";
     public static void Log(object obj)
     {
@@ -20,7 +26,7 @@ public unsafe class EntryPoint
     private static int counter = 0;
     private static void Show(object message)
     {
-        Interop.MessageBox(0, message.ToString(), counter.ToString(),0);
+        MessageBox(0, message.ToString(), counter.ToString(),0);
         counter++;
     }
 
@@ -47,7 +53,7 @@ public unsafe class EntryPoint
 
         Show("First");
         // Will be hooked
-        Interop.Sleep(10000);
+        Sleep(10000);
 
         Show("Second");
         // Will not be hooked

@@ -6,6 +6,9 @@ namespace Sample;
 
 public class Program
 {
+    [DllImport("user32", SetLastError = true, CharSet = CharSet.Auto)]
+    internal static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
+
     public static void Main() { }
 
     private static EntryPoint entryPoint = new EntryPoint();
@@ -42,7 +45,7 @@ public class Program
                 case DLL_THREAD_ATTACH: break;
                 case DLL_THREAD_DETACH: break;
             }
-        } catch (Exception ex) { Interop.MessageBox(0, ex.ToString(), "C# Exception", 0); }
+        } catch (Exception ex) { MessageBox(0, ex.ToString(), "C# Exception", 0); }
 
         return true;
     }

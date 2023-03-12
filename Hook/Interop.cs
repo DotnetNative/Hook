@@ -6,27 +6,27 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Hook;
-public unsafe class Interop
+internal unsafe class Interop
 {
     [DllImport("user32", SetLastError = true, CharSet = CharSet.Auto)]
-    public static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
+    internal static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
 
     [DllImport("kernel32", CharSet = CharSet.Unicode, SetLastError = true)]
-    public static extern IntPtr GetModuleHandle([MarshalAs(UnmanagedType.LPWStr)] string lpModuleName);
+    internal static extern IntPtr GetModuleHandle([MarshalAs(UnmanagedType.LPWStr)] string lpModuleName);
 
     [DllImport("kernel32", CharSet = CharSet.Ansi, ExactSpelling = true, SetLastError = true)]
-    public static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
+    internal static extern IntPtr GetProcAddress(IntPtr hModule, string procName);
 
-    public static void* GetProcAddressPtr(IntPtr hModule, [MarshalAs(UnmanagedType.LPWStr)] string lpModuleName) => GetProcAddress(hModule, lpModuleName).ToPointer();
+    internal static void* GetProcAddressPtr(IntPtr hModule, [MarshalAs(UnmanagedType.LPWStr)] string lpModuleName) => GetProcAddress(hModule, lpModuleName).ToPointer();
 
     [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Ansi)]
-    public static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPStr)] string lpFileName);
+    internal static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPStr)] string lpFileName);
 
     [DllImport("kernel32")]
-    public static extern IntPtr GetCurrentThread();
+    internal static extern IntPtr GetCurrentThread();
 
     [Flags]
-    public enum LoadLibraryFlags : uint
+    internal enum LoadLibraryFlags : uint
     {
         None = 0,
         DONT_RESOLVE_DLL_REFERENCES = 0x00000001,
@@ -45,8 +45,8 @@ public unsafe class Interop
     }
 
     [DllImport("kernel32", SetLastError = true)]
-    public static extern IntPtr LoadLibraryEx(string lpFileName, IntPtr hReservedNull, LoadLibraryFlags dwFlags);
+    internal static extern IntPtr LoadLibraryEx(string lpFileName, IntPtr hReservedNull, LoadLibraryFlags dwFlags);
 
     [DllImport("kernel32")]
-    public static extern void Sleep(uint dwMilliseconds);
+    internal static extern void Sleep(uint dwMilliseconds);
 }

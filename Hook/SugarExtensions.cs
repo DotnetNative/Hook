@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace Hook;
-public static unsafe class SugarExtensions
+internal static unsafe class SugarExtensions
 {
     public static void** Ptr(void* ptr) => &ptr;
 
