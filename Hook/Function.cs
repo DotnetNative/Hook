@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Hook;
+﻿namespace Hook;
 public unsafe class Function
 {
     public Function(IntPtr addr)
@@ -41,4 +33,5 @@ public unsafe class Function
 
     public static explicit operator void*(Function func) => func.Ptr;
     public static implicit operator Function(void* ptr) => new Function(ptr);
+    public static implicit operator Function(string dllAndName) => new Function(dllAndName);
 }

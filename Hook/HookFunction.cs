@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Hook;
+﻿namespace Hook;
 public unsafe class HookFunction
 {
     public HookFunction(Function origin, Function ripped)
@@ -17,14 +11,16 @@ public unsafe class HookFunction
     public Function Ripped { get; private set; }
     public bool Modified { get; private set; }
 
-    public void Attach()
+    public HookFunction Attach()
     {
         if (Modified)
-            return;
+            return this;
 
         Modified = true;
         fixed (void** ptr = &Origin.Ptr)
             HookApi.Attach(ptr, Ripped.Ptr);
+
+        return this;
     }
 
     public void Detach()

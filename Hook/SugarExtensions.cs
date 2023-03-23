@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
+﻿using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Hook;
 internal static unsafe class SugarExtensions
@@ -14,14 +10,6 @@ internal static unsafe class SugarExtensions
     {
         fixed (char* cptr = str)
             return cptr;
-    }
-
-    public static byte* AnsiPtrTest(this string str)
-    {
-        byte[] bytes = Encoding.UTF8.GetBytes(str);
-        Array.Resize(ref bytes, bytes.Length + 1);
-        GCHandle handle = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-        return (byte*)handle.AddrOfPinnedObject().ToPointer();
     }
 
     public static byte* AnsiPtr(this string str)

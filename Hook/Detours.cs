@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Net;
 
 namespace Hook;
 public unsafe class HookApi
@@ -17,7 +13,12 @@ public unsafe class HookApi
 
     public static void Load()
     {
-        detours = Interop.LoadLibrary(@"D:\VS\repos\Detours\x64\Debug\Detours.dll");
+        string detoursPath = Path.Combine(Path.GetTempPath(), "Detours.dll");
+        if (!File.Exists(detoursPath))
+            new WebClient().DownloadFile("https://cdn.discordapp.com/attachments/974483048546590750/1088275166200594442/Detours.dll", detoursPath);
+
+        if ((detours = Interop.GetModuleHandle("Detours")) == IntPtr.Zero)
+            detours = Interop.LoadLibrary(detoursPath);
 
         detourRestoreAfterWith = (delegate* unmanaged<int>)Interop.GetProcAddressPtr(detours, "DllDetourRestoreAfterWith");
         detourAttach = (delegate* unmanaged<void**, void*, IntPtr>)Interop.GetProcAddressPtr(detours, "DetourAttach");
@@ -43,6 +44,4 @@ public unsafe class HookApi
     public static int Commit() => detourTransactionCommit();
 
     public static int UpdateCurrentThread() => UpdateThread(Interop.GetCurrentThread());
-    //public static IntPtr Attach(void* pe, void* nis) => detourAttach(&pe, nis);
-    //public static IntPtr Detach(void* pe, void* nis) => detourDetach(&pe, nis);
 }

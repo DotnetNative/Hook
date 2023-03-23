@@ -11,6 +11,7 @@
     <Company />
     <Product />
     <Description>Function Hooking Library. Works in conjunction with NativeAOT</Description>
+    <Version>1.0.1</Version>
   </PropertyGroup>
 
   <ItemGroup>
