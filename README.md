@@ -1,7 +1,7 @@
 <h1>NAOT Hook</h1>
 
 A library for fuction hooking.\
-Works with conjunction with NAOT.\
+Works with NAOT.\
 NuGet - https://www.nuget.org/packages/Yotic.Hook/
 
 <h1>Example</h1>
