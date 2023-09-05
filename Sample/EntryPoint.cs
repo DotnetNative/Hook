@@ -1,34 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Linq.Expressions;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Runtime.InteropServices;
 using Hook;
 
 namespace Sample;
 public unsafe class EntryPoint
 {
-    [DllImport("user32", SetLastError = true, CharSet = CharSet.Auto)]
-    internal static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
+    [DllImport("user32", CharSet = CharSet.Auto)]
+    static extern int MessageBox(nint hWnd, string text, string caption, uint type);
 
     [DllImport("kernel32")]
-    internal static extern void Sleep(uint dwMilliseconds);
+    static extern void Sleep(uint dwMilliseconds);
 
-    private static string logPath = @"C:\log.txt";
+    static string logPath = @"C:\log.txt";
     public static void Log(object obj)
     {
         File.AppendAllText(logPath, $"{obj}\n");
     }
 
-    private static int counter = 0;
-    private static void Show(object message)
-    {
-        MessageBox(0, message.ToString(), counter.ToString(),0);
-        counter++;
-    }
+    static int counter = 0;
+    static void Show(object message) => MessageBox(0, message == null ? "null" : message.ToString(), counter++.ToString(), 0);
 
     [UnmanagedCallersOnly(EntryPoint = "Sleep2")]
     public static void Sleep2(uint ms)

@@ -1,15 +1,7 @@
 ﻿namespace Hook;
-public unsafe class HookFunction
+public unsafe record HookFunction(Function Origin, Function Ripped)
 {
-    public HookFunction(Function origin, Function ripped)
-    {
-        Origin = origin;
-        Ripped = ripped;
-    }
-
-    public Function Origin { get; private set; }
-    public Function Ripped { get; private set; }
-    public bool Modified { get; private set; }
+    public bool Modified;
 
     public HookFunction Attach()
     {
@@ -23,15 +15,18 @@ public unsafe class HookFunction
         return this;
     }
 
-    public void Detach()
+    public HookFunction Detach()
     {
         if (!Modified)
-            return;
+            return this;
 
         Modified = false;
         fixed (void** ptr = &Origin.Ptr)
             HookApi.Detach(ptr, Ripped.Ptr);
+
+        return this;
     }
 
     public static explicit operator void*(HookFunction func) => func.Origin.Ptr;
+    public static explicit operator nint(HookFunction func) => func.Origin.Addr;
 }

@@ -6,18 +6,27 @@
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageId>Yotic.Hook</PackageId>
-    <Title>Function Hooking Library. Works in conjunction with NativeAOT</Title>
+    <Title>Hook</Title>
     <Authors>Yotic</Authors>
     <Company />
     <Product />
     <Description>Function Hooking Library. Works in conjunction with NativeAOT</Description>
-    <Version>1.0.2</Version>
+    <Version>1.1.1</Version>
+    <PackageReadmeFile>Pack.md</PackageReadmeFile>
+    <PackageTags>hook, naot, yotic</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="obj\**" />
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Pack.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
   </ItemGroup>
 
 </Project>

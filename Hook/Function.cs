@@ -1,37 +1,19 @@
 ﻿namespace Hook;
 public unsafe class Function
 {
-    public Function(IntPtr addr)
-    {
-        Addr = addr;
-        Ptr = addr.ToPointer();
-    }
+    Function(string[] parts) : this(Interop.GetProcAddress(Interop.GetModuleHandle(parts[0]), parts[1])) { }
 
-    public Function(string dll, string name)
-    {
-        IntPtr module = Interop.GetModuleHandle(dll);
-        Addr = Interop.GetProcAddress(module, name);
-        Ptr = Addr.ToPointer();
-    }
+    public Function(void* ptr) => Ptr = ptr;
+    public Function(nint addr) : this((void*)addr) { }
+    public Function(string dll, string name) : this(new string[] { dll, name }) { }
+    public Function(string dllAndName) : this(dllAndName.Split('.')) { }
 
-    public Function(string dllAndName)
-    {
-        string[] splitted = dllAndName.Split('.');
-        IntPtr module = Interop.GetModuleHandle(splitted[0]);
-        Addr = Interop.GetProcAddress(module, splitted[1]);
-        Ptr = Addr.ToPointer();
-    }
-
-    public Function(void* ptr)
-    {
-        Addr = new IntPtr(ptr);
-        Ptr = ptr;
-    }
-
-    public IntPtr Addr { get; private set; }
+    public nint Addr => (nint)Ptr;
     public void* Ptr;
 
     public static explicit operator void*(Function func) => func.Ptr;
+    public static explicit operator nint(Function func) => (nint)func.Ptr;
     public static implicit operator Function(void* ptr) => new Function(ptr);
+    public static implicit operator Function(nint addr) => new Function(addr);
     public static implicit operator Function(string dllAndName) => new Function(dllAndName);
 }
