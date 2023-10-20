@@ -5,9 +5,6 @@ namespace Sample;
 
 public class Program
 {
-    [DllImport("user32", SetLastError = true, CharSet = CharSet.Auto)]
-    internal static extern int MessageBox(nint hWnd, string text, string caption, uint type);
-
     const uint DLL_PROCESS_ATTACH = 1;
 
     static bool loaded;
@@ -15,15 +12,14 @@ public class Program
     [UnmanagedCallersOnly(EntryPoint = "DllMain", CallConvs = new Type[] { typeof(CallConvStdcall) })]
     public static bool DllMain(nint module, uint reason, nint reserved)
     {
-        switch (reason)
+        if (reason == DLL_PROCESS_ATTACH)
         {
-            case DLL_PROCESS_ATTACH:
-                if (loaded)
-                    return false;
-                loaded = true;
+            if (loaded)
+                return true;
 
-                new EntryPoint().Load();
-                break;
+            loaded = true;
+
+            new EntryPoint().Load();
         }
 
         return true;

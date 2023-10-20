@@ -1,7 +1,26 @@
-﻿namespace Hook;
-public unsafe record HookFunction(Function Origin, Function Ripped)
+﻿using Cetours;
+
+namespace Hook;
+public unsafe class HookFunction
 {
+    public HookFunction(Function origin, Function ripped)
+    {
+        Origin = origin;
+        Ripped = ripped;
+
+        NewFunc = Cetour.Create(Origin.Ptr, Ripped.Ptr, out len);
+    }
+
+    public Function Origin, Ripped;
     public bool Modified;
+    public void* NewFunc;
+    public void* CurrentOrigin => Modified ? NewFunc : Origin.Ptr;
+
+    int len;
+
+    public delegate void FuncActionDelegate(HookFunction sender);
+    public event FuncActionDelegate? Attached;
+    public event FuncActionDelegate? Detached;
 
     public HookFunction Attach()
     {
@@ -9,8 +28,9 @@ public unsafe record HookFunction(Function Origin, Function Ripped)
             return this;
 
         Modified = true;
-        fixed (void** ptr = &Origin.Ptr)
-            HookApi.Attach(ptr, Ripped.Ptr);
+
+        Cetour.Attach(Origin.Ptr, Ripped.Ptr, len);
+        Attached?.Invoke(this);
 
         return this;
     }
@@ -21,12 +41,15 @@ public unsafe record HookFunction(Function Origin, Function Ripped)
             return this;
 
         Modified = false;
-        fixed (void** ptr = &Origin.Ptr)
-            HookApi.Detach(ptr, Ripped.Ptr);
+
+        Cetour.Detach(Origin.Ptr, NewFunc, len);
+        Detached?.Invoke(this);
 
         return this;
     }
 
-    public static explicit operator void*(HookFunction func) => func.Origin.Ptr;
-    public static explicit operator nint(HookFunction func) => func.Origin.Addr;
+    public override string ToString() => $"HookFunction(M: {Modified}, O: {Origin}, R: {Ripped}, N: {((nint)NewFunc).ToString("X")})";
+
+    public static explicit operator void*(HookFunction func) => func.CurrentOrigin;
+    public static explicit operator nint(HookFunction func) => (nint)func.CurrentOrigin;
 }

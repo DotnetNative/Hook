@@ -1,2 +1,1 @@
-Function Hooking Library. Works with NativeAOT
-github - https://github.com/MrYotic/NAOT-Hook
+High-level detours library for internally hooking native functions. Implemented of Yoticc.Cetours

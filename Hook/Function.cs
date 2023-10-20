@@ -11,6 +11,8 @@ public unsafe class Function
     public nint Addr => (nint)Ptr;
     public void* Ptr;
 
+    public override string ToString() => Addr.ToString("X");
+
     public static explicit operator void*(Function func) => func.Ptr;
     public static explicit operator nint(Function func) => (nint)func.Ptr;
     public static implicit operator Function(void* ptr) => new Function(ptr);

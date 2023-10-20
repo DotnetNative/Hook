@@ -10,16 +10,21 @@
     <Authors>Yotic</Authors>
     <Company />
     <Product />
-    <Description>Function Hooking Library. Works in conjunction with NativeAOT</Description>
+    <Description>High-level detours library for internally hooking native functions. Implemented of Yoticc.Cetours</Description>
     <Version>2.0.0</Version>
     <PackageReadmeFile>Pack.md</PackageReadmeFile>
-    <PackageTags>hook, naot, yotic</PackageTags>
+    <PackageTags>naot, hooking, detours</PackageTags>
+    <RepositoryUrl>https://github.com/Yoticc/Hook</RepositoryUrl>
   </PropertyGroup>
 
   <ItemGroup>
     <Compile Remove="obj\**" />
     <EmbeddedResource Remove="obj\**" />
     <None Remove="obj\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Cetours" Version="1.0.0" />
   </ItemGroup>
 
   <ItemGroup>
