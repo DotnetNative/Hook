@@ -1,6 +1,6 @@
 <h1>Hook</h1>
 
-Internal Hooking library for Native code 
+Internal Hooking library for Native code \
 NuGet - https://www.nuget.org/packages/Yotic.Hook/
 
 <h1>Example</h1>
