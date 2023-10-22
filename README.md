@@ -3,6 +3,10 @@
 Internal Hooking library for Native code \
 NuGet - https://www.nuget.org/packages/Yotic.Hook/
 
+<h2>Warning</h2>
+
+Cetours is newly created library and may contain bugs. Please, if you can’t hook a some function, then create a new issue about it.
+
 <h1>Example</h1>
 
 ```
@@ -45,6 +49,6 @@ public unsafe class EntryPoint
 }
 ```
 
-<h1>Setup for build</h1>
+<h2>Setup for build</h2>
 
 Remove reference to local library **Cetours** and add **Cetours** via Nuget
