@@ -44,3 +44,7 @@ public unsafe class EntryPoint
     }
 }
 ```
+
+<h1>Setup for build</h1>
+
+Remove reference to local library **Cetours** and add **Cetours** via Nuget
