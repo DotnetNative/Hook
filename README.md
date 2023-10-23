@@ -1,52 +1,54 @@
-<h1>NAOT Hook</h1>
+<h1>Hook</h1>
 
-A library for fuction hooking.\
-Works with NAOT.\
+Internal hooking library for Native code \
 NuGet - https://www.nuget.org/packages/Yotic.Hook/
+
+<h2>Warning</h2>
+
+Cetours is newly created library and may contain bugs. Please, if you can’t hook a some function, then create a new issue about it.
 
 <h1>Example</h1>
 
 ```
+using System.Runtime.InteropServices;
 using Hook;
 
-[DllImport("user32", SetLastError = true, CharSet = CharSet.Auto)]
-static extern int MessageBox(IntPtr hWnd, string text, string caption, uint type);
-
-[DllImport("kernel32")]
-static extern void Sleep(uint ms);
-
-static HookFunction sleepHook;
-static void Main()
+namespace Sample;
+public unsafe class EntryPoint
 {
-   HookApi.AltInit();
-   
-   // Put hooks here
-   sleepHook = new HookFunction("kernel32.Sleep", (delegate* unmanaged<uint, void>)&Sleep).Attach();
-   
-   HookApi.Commit();
+    [DllImport("user32", CharSet = CharSet.Auto)]
+    static extern int MessageBox(nint hWnd, string text, string caption, uint type);
 
-   // Will be hooked
-   Sleep(90000);
+    [DllImport("kernel32")]
+    static extern void Sleep(uint dwMilliseconds);
 
-   // Will not be hooked
-   ((delegate* unmanaged<uint, void>)sleepHook)(90000); // Can be used 'sleepHook', 'origin', or 'origin.Ptr'
-}
+    static int counter = 0;
+    static void Show(object message) => MessageBox(0, message == null ? "null" : message.ToString(), counter++.ToString(), 0);
 
-[UnmanagedCallersOnly]
-static void Sleep(uint ms)
-{
-    if (ReceiveSleep(ref ms))
-        ((delegate* unmanaged<uint, void>)sleepHook)(ms);
-}
-
-static bool ReceiveSleep(ref uint ms)
-{
-    if (ms > 60000)
+    [UnmanagedCallersOnly]
+    public static void HookedSleep(uint ms)
     {
-        MessageBox(0, $"The sleep function was called, with a delay of more than a minute. The function has been cancelled (delay - {ms})", "Warning", 0);
-        return false; // or ms = 0;
+        Show("sleep time: " + ms);
     }
 
-    return true;
+    public void Load()
+    {
+        var origin = new Function("kernel32.Sleep");
+        var ripped = new Function((delegate* unmanaged<uint, void>)&HookedSleep);
+        var hook = new HookFunction(origin, ripped);
+
+        hook.Attach();
+
+        Show("Call original (will call HookedSleep)");
+        Sleep(10000);
+
+        Show("Call hook (will call original function)");
+        ((delegate* unmanaged<uint, void>)hook)(10000);
+        Show("End");
+    }
 }
 ```
+
+<h2>Setup for build</h2>
+
+Remove reference to local library **Cetours** and add **Cetours** via Nuget
