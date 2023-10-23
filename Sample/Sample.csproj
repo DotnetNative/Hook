@@ -16,6 +16,7 @@
 		<Company />
 		<Product />
 		<Description>Function Hooking Library. Works in conjunction with NativeAOT</Description>
+		<Platforms>AnyCPU;x64</Platforms>
 	</PropertyGroup>
 
   <ItemGroup>

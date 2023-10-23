@@ -8,9 +8,15 @@ public unsafe class HookFunction
         Origin = origin;
         Ripped = ripped;
 
-        NewFunc = Cetour.Create(Origin.Ptr, Ripped.Ptr, out len);
+        InitOriginAddr = Origin.Addr;
+
+        nint originAddr = Origin.Addr;
+        var ptr = (void**)&originAddr;
+        NewFunc = Cetour.Create(ptr, Ripped.Ptr, out len);
+        Origin.Ptr = (void*)originAddr;
     }
 
+    public nint InitOriginAddr;
     public Function Origin, Ripped;
     public bool Modified;
     public void* NewFunc;

@@ -15,6 +15,15 @@
     <PackageReadmeFile>Pack.md</PackageReadmeFile>
     <PackageTags>naot, hooking, detours</PackageTags>
     <RepositoryUrl>https://github.com/Yoticc/Hook</RepositoryUrl>
+    <Platforms>AnyCPU;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Optimize>False</Optimize>
   </PropertyGroup>
 
   <ItemGroup>
@@ -24,7 +33,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cetours" Version="1.0.2" />
+    <Reference Include="Cetours">
+      <HintPath>..\..\Cetours\Cetours\bin\x64\Release\net7.0\Cetours.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>
