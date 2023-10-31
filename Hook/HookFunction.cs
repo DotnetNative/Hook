@@ -1,28 +1,27 @@
 ﻿using Cetours;
+using Cetours.Hooking;
 
 namespace Hook;
 public unsafe class HookFunction
 {
-    public HookFunction(Function origin, Function ripped)
+    public HookFunction(Function origin, Function ripped) : this(origin, ripped, new()) { }
+    public HookFunction(Function origin, Function ripped, HookInnerData data)
     {
         Origin = origin;
         Ripped = ripped;
 
-        InitOriginAddr = Origin.Addr;
-
-        nint originAddr = Origin.Addr;
-        var ptr = (void**)&originAddr;
-        NewFunc = Cetour.Create(ptr, Ripped.Ptr, out len);
-        Origin.Ptr = (void*)originAddr;
+        hook = Cetour.Create((void*)origin, (void*)ripped, data);
     }
 
-    public nint InitOriginAddr;
-    public Function Origin, Ripped;
     public bool Modified;
-    public void* NewFunc;
-    public void* CurrentOrigin => Modified ? NewFunc : Origin.Ptr;
+    public Function Origin, Ripped;
 
-    int len;
+    public void* CurrentOrigin => Modified ? hook.New : Origin.Ptr;
+    public string NameOrAddr => Origin.Name == null ? Origin.Addr.ToString("X") : $"{Origin.Name}({Origin.Addr.ToString("X")})";
+    public string NameAddrOrAddr => Origin.ToString();
+    public string NameOrSpace => Origin.Name == null ? "" : Origin.Name;
+
+    Cetours.Hooking.Hook hook;
 
     public delegate void FuncActionDelegate(HookFunction sender);
     public event FuncActionDelegate? Attached;
@@ -35,7 +34,7 @@ public unsafe class HookFunction
 
         Modified = true;
 
-        Cetour.Attach(Origin.Ptr, Ripped.Ptr, len);
+        hook.Attach();
         Attached?.Invoke(this);
 
         return this;
@@ -48,13 +47,13 @@ public unsafe class HookFunction
 
         Modified = false;
 
-        Cetour.Detach(Origin.Ptr, NewFunc, len);
+        hook.Detach();
         Detached?.Invoke(this);
 
         return this;
     }
 
-    public override string ToString() => $"HookFunction(M: {Modified}, O: {Origin}, R: {Ripped}, N: {((nint)NewFunc).ToString("X")})";
+    public override string ToString() => $"HookFunction(M: {Modified}, O: {Origin}, R: {Ripped}, N: {((nint)hook.New).ToString("X")})";
 
     public static explicit operator void*(HookFunction func) => func.CurrentOrigin;
     public static explicit operator nint(HookFunction func) => (nint)func.CurrentOrigin;

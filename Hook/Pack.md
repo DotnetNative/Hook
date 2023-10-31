@@ -1,1 +1,1 @@
-High-level detours library for internally hooking native functions. Implemented of Yoticc.Cetours
+High-level detours library for internally hooking native functions. Implemented of Yotic.Cetours

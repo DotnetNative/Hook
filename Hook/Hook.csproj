@@ -11,7 +11,7 @@
     <Company />
     <Product />
     <Description>High-level detours library for internally hooking native functions. Implemented of Yoticc.Cetours</Description>
-    <Version>2.0.2</Version>
+    <Version>2.0.3</Version>
     <PackageReadmeFile>Pack.md</PackageReadmeFile>
     <PackageTags>naot, hooking, detours</PackageTags>
     <RepositoryUrl>https://github.com/Yoticc/Hook</RepositoryUrl>
@@ -33,9 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Cetours">
-      <HintPath>..\..\Cetours\Cetours\bin\x64\Release\net7.0\Cetours.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Cetours" Version="1.0.3" />
   </ItemGroup>
 
   <ItemGroup>

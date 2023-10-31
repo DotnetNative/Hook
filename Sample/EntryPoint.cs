@@ -1,5 +1,5 @@
-﻿using System.Runtime.InteropServices;
-using Hook;
+﻿using Hook;
+using System.Runtime.InteropServices;
 
 namespace Sample;
 public unsafe class EntryPoint

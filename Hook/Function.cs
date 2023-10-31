@@ -5,13 +5,15 @@ public unsafe class Function
 
     public Function(void* ptr) => Ptr = ptr;
     public Function(nint addr) : this((void*)addr) { }
-    public Function(string dll, string name) : this(new string[] { dll, name }) { }
     public Function(string dllAndName) : this(dllAndName.Split('.')) { }
+    public Function(string dll, string name) : this(new string[] { dll, name }) => Name = $"{dll}.{name}";
 
-    public nint Addr => (nint)Ptr;
     public void* Ptr;
 
-    public override string ToString() => Addr.ToString("X");
+    public nint Addr => (nint)Ptr;
+    public string Name { get; init; }
+
+    public override string ToString() => Name == null ? Addr.ToString("X") : $"{Name}({Addr.ToString("X")})";
 
     public static explicit operator void*(Function func) => func.Ptr;
     public static explicit operator nint(Function func) => (nint)func.Ptr;
