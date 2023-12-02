@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -11,7 +11,7 @@
     <Company />
     <Product />
     <Description>High-level detours library for internally hooking native functions. Implemented of Yoticc.Cetours</Description>
-    <Version>2.0.3</Version>
+    <Version>2.0.4</Version>
     <PackageReadmeFile>Pack.md</PackageReadmeFile>
     <PackageTags>naot, hooking, detours</PackageTags>
     <RepositoryUrl>https://github.com/Yoticc/Hook</RepositoryUrl>
@@ -33,7 +33,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Cetours" Version="1.0.3" />
+    <PackageReference Include="Cetours" Version="1.0.4" />
   </ItemGroup>
 
   <ItemGroup>
