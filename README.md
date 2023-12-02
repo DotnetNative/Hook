@@ -9,7 +9,8 @@ Setup for build
 ------------------------------
 Remove reference to local library **Cetours** and add **Cetours** via Nuget
 
-Versions:
+Versions
+------------------------------
 | Start ordinal | Framework | Description | Date |
 | ---   | ---     | ---                                      | ---          |
 | 2.0.4 | .net8.0 | Changed framework                        | Dec 2, 2023  |
