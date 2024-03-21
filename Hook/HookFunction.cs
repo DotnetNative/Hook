@@ -14,14 +14,14 @@ public unsafe class HookFunction
     }
 
     public bool Modified;
-    public Function Origin, Ripped;
+    public readonly Function Origin, Ripped;
 
     public void* CurrentOrigin => Modified ? hook.New : Origin.Ptr;
     public string NameOrAddr => Origin.Name == null ? Origin.Addr.ToString("X") : $"{Origin.Name}({Origin.Addr.ToString("X")})";
     public string NameAddrOrAddr => Origin.ToString();
     public string NameOrSpace => Origin.Name == null ? "" : Origin.Name;
 
-    Cetours.Hooking.Hook hook;
+    readonly Cetours.Hooking.Hook hook;
 
     public delegate void FuncActionDelegate(HookFunction sender);
     public event FuncActionDelegate? Attached;
@@ -53,7 +53,7 @@ public unsafe class HookFunction
         return this;
     }
 
-    public override string ToString() => $"HookFunction(M: {Modified}, O: {Origin}, R: {Ripped}, N: {((nint)hook.New).ToString("X")})";
+    public override string ToString() => $"HookFunction(M: {Modified}, O: {Origin}, R: {Ripped}, N: {(nint)hook.New:X})";
 
     public static explicit operator void*(HookFunction func) => func.CurrentOrigin;
     public static explicit operator nint(HookFunction func) => (nint)func.CurrentOrigin;

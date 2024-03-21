@@ -8,12 +8,12 @@ public unsafe class Function
     public Function(string dllAndName) : this(dllAndName.Split('.')) { }
     public Function(string dll, string name) : this(new string[] { dll, name }) => Name = $"{dll}.{name}";
 
-    public void* Ptr;
+    public readonly void* Ptr;
+    public readonly string? Name;
 
     public nint Addr => (nint)Ptr;
-    public string Name { get; init; }
 
-    public override string ToString() => Name == null ? Addr.ToString("X") : $"{Name}({Addr.ToString("X")})";
+    public override string ToString() => Name == null ? Addr.ToString("X") : $"{Name}({Addr:X)})";
 
     public static explicit operator void*(Function func) => func.Ptr;
     public static explicit operator nint(Function func) => (nint)func.Ptr;

@@ -9,7 +9,7 @@ public class Program
 
     static bool loaded;
 
-    [UnmanagedCallersOnly(EntryPoint = "DllMain", CallConvs = new Type[] { typeof(CallConvStdcall) })]
+    [UnmanagedCallersOnly(EntryPoint = "DllMain", CallConvs = [typeof(CallConvStdcall)])]
     public static bool DllMain(nint module, uint reason, nint reserved)
     {
         if (reason == DLL_PROCESS_ATTACH)
@@ -19,7 +19,7 @@ public class Program
 
             loaded = true;
 
-            new EntryPoint().Load();
+            EntryPoint.Load();
         }
 
         return true;

@@ -11,7 +11,7 @@ public unsafe class EntryPoint
     static extern void Sleep(uint dwMilliseconds);
 
     static int counter = 0;
-    static void Show(object message) => MessageBox(0, message == null ? "null" : message.ToString(), counter++.ToString(), 0);
+    static void Show(object message) => MessageBox(0, message == null ? "null" : message.ToString()!, counter++.ToString(), 0);
 
     [UnmanagedCallersOnly]
     public static void HookedSleep(uint ms)
@@ -19,7 +19,7 @@ public unsafe class EntryPoint
         Show("sleep time: " + ms);
     }
 
-    public void Load()
+    public static void Load()
     {
         var origin = new Function("kernel32.Sleep");
         var ripped = new Function((delegate* unmanaged<uint, void>)&HookedSleep);
